@@ -123,7 +123,6 @@ function initOrderAdminEventListeners() {
       const data = await editOrderList(orderId);
       updateOrderState(data);
       renderOrderTable(data);
-      renderChart(data);
     } catch (error) {
       const message = error.response?.data?.message;
       showErrorAlert("修改訂單狀態失敗，請重新嘗試", message);
