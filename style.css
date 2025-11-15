@@ -677,6 +677,13 @@ body {
   color: #FFFFFF;
 }
 
+.discardAllBtn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  /* 如果需要完全禁止點擊 */
+  pointer-events: none;
+}
+
 .orderInfo {
   padding: 60px 0;
 }
@@ -808,18 +815,18 @@ body {
 }
 
 .orderStatus a {
-  position: absolute;
+  /* position: absolute;
   padding: 10px;
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
-  display: block;
+  display: block; */
   text-decoration: none;
-  color: #FFFFFF;
+  color: #C44021;
 }
 
-.orderStatus-unDone {
+/* .orderStatus-unDone {
   background-color: #747474;
 }
 
@@ -833,6 +840,14 @@ body {
 
 .orderStatus-done:hover {
   background-color: #747474;
+} */
+
+.orderStatus-unDone:hover {
+  text-decoration: underline;
+}
+
+.orderStatus-done {
+  color: #21C44A;
 }
 
 .orderTableWrap {
@@ -847,6 +862,10 @@ body {
   display: none;
 }
 /*# sourceMappingURL=all.css.map */
+
+.text-center {
+  text-align: center;
+}
 
 
 /* alert.css */

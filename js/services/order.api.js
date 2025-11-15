@@ -15,62 +15,56 @@ async function createOrder(data) {
   }
 }
 
+const adminApiBaseUrl = `${apiBaseUrl}/admin/${api_path}`;
+const adminHeaders = {
+  headers: {
+    'Authorization': token
+  }
+}
+
 // 取得訂單列表
-function getOrderList() {
-  axios.get(`${apiBaseUrl}/admin/${api_path}/orders`,
-    {
-      headers: {
-        'Authorization': token
-      }
-    })
-    .then(function (response) {
-      console.log(response.data);
-    })
+async function getOrderList() {
+  try {
+    const response = await axios.get(`${adminApiBaseUrl}/orders`, adminHeaders);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // 修改訂單狀態
-function editOrderList(orderId) {
-  axios.put(`${apiBaseUrl}/admin/${api_path}/orders`,
-    {
+async function editOrderList(orderId) {
+  try {
+    const response = await axios.put(`${adminApiBaseUrl}/orders`, {
       data: {
         id: orderId,
         paid: true
       }
-    },
-    {
-      headers: {
-        'Authorization': token
-      }
-    })
-    .then(function (response) {
-      console.log(response.data);
-    })
+    }, adminHeaders);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // 刪除全部訂單
-function deleteAllOrder() {
-  axios.delete(`${apiBaseUrl}/admin/${api_path}/orders`,
-    {
-      headers: {
-        'Authorization': token
-      }
-    })
-    .then(function (response) {
-      console.log(response.data);
-    })
+async function deleteAllOrder() {
+  try {
+    const response = await axios.delete(`${adminApiBaseUrl}/orders`, adminHeaders);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // 刪除特定訂單
-function deleteOrderItem(orderId) {
-  axios.delete(`${apiBaseUrl}/admin/${api_path}/orders/${orderId}`,
-    {
-      headers: {
-        'Authorization': token
-      }
-    })
-    .then(function (response) {
-      console.log(response.data);
-    })
+async function deleteOrderItem(orderId) {
+  try {
+    const response = await axios.delete(`${adminApiBaseUrl}/orders/${orderId}`, adminHeaders);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export { createOrder, getOrderList, editOrderList, deleteAllOrder, deleteOrderItem };
