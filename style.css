@@ -863,6 +863,22 @@ body {
 }
 /*# sourceMappingURL=all.css.map */
 
+.d-flex {
+  display: flex;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.w-50 {
+  width: 50%;
+}
+.w-md-100 {
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+}
+
 .text-center {
   text-align: center;
 }

@@ -67,38 +67,88 @@ function renderOrderTable(data) {
 }
 
 function renderChart(data) {
-  /* 
-  LV 2｜（圓餅圖，做全產品類別營收比重，類別含三項，共有：床架、收納、窗簾）
-  LV 3｜（圓餅圖，做全品項營收比重，類別含四項，篩選出前三名營收品項，其他 4~8 名都統整為「其它」）
-  */
   const { orders } = data;
 
   if (orders.length === 0) {
-    document.querySelector("#chart").innerHTML = "<p class='text-center'>目前沒有訂單</p>";
+    document.querySelector("#chart-category").innerHTML = "<p class='text-center'>目前沒有訂單</p>";
+    document.querySelector("#chart-product").innerHTML = "<p class='text-center'>目前沒有訂單</p>";
     return;
   }
 
-  const categoryRevenue = orders.reduce((acc, order) => {
-    const { products } = order;
-    products.forEach(product => {
-      const { category, price } = product;
-      acc[category] = (acc[category] || 0) + price;
+  const colorPattern = ["#DACBFF", "#9D7FEA", "#5434A7", "#301E5F"];
+  const formatTooltipValue = function (value, ratio) {
+    const valueFormat = d3.format('$,')(value);
+    const ratioFormat = d3.format('.1%')(ratio);
+    return `${ratioFormat} | ${valueFormat}`;
+  }
+
+  function renderChartCategory() {
+    const categoryRevenue = orders.reduce((acc, order) => {
+      const { products } = order;
+      products.forEach(product => {
+        const { category, price } = product;
+        acc[category] = (acc[category] || 0) + price;
+      });
+      return acc;
+    }, {});
+    const chartData = Object.entries(categoryRevenue).map(([category, revenue]) => [category, revenue]);
+    const chart = c3.generate({
+      bindto: '#chart-category', // HTML 元素綁定
+      data: {
+        type: "pie",
+        columns: chartData,
+      },
+      tooltip: {
+        format: {
+          value: formatTooltipValue
+        }
+      },
+      color: {
+        pattern: colorPattern,
+      }
     });
-    return acc;
-  }, {});
+  }
 
-  const chartData = Object.entries(categoryRevenue).map(([category, revenue]) => [category, revenue]);
 
-  const chart = c3.generate({
-    bindto: '#chart', // HTML 元素綁定
-    data: {
-      type: "pie",
-      columns: chartData,
-    },
-    color: {
-      pattern: ['#DACBFF', '#9D7FEA', '#5434A7', '#301E5F'],
-    }
-  });
+  function renderChartProduct() {
+    const productRevenue = orders.reduce((acc, order) => {
+      const { products } = order;
+      products.forEach(product => {
+        const { title, price } = product;
+        acc[title] = (acc[title] || 0) + price;
+      });
+      return acc;
+    }, {});
+
+    // 篩選出前三名營收品項，其他 4~8 名都統整為「其它」
+    const sortedProductRevenue = Object.entries(productRevenue).sort((a, b) => b[1] - a[1]);
+    const combinedProductRevenue = sortedProductRevenue.slice(0, 3).concat(sortedProductRevenue.slice(3).reduce((acc, [title, revenue]) => {
+      acc[0][1] += revenue;
+      return acc;
+    }, [["其它", 0]]));
+
+
+    const chartData = combinedProductRevenue;
+    const chart = c3.generate({
+      bindto: '#chart-product', // HTML 元素綁定
+      data: {
+        type: "pie",
+        columns: chartData,
+      },
+      tooltip: {
+        format: {
+          value: formatTooltipValue
+        }
+      },
+      color: {
+        pattern: colorPattern,
+      }
+    });
+  }
+
+
+  renderChartCategory();
+  renderChartProduct();
 
 }
 
