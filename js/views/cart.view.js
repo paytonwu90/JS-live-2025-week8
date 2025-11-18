@@ -60,7 +60,17 @@ function renderCartTable(data) {
         </div>
       </td>
       <td>${formatCurrency(product.price)}</td>
-      <td>${cartItem.quantity}</td>
+      <td>
+        <div class="cartItem-quantity d-flex align-items-center">
+          <a href="#" class="cartItem-quantity-minus material-icons-outlined" data-id="${cartItem.id}">
+            remove_circle_outline
+          </a>
+          <span>${cartItem.quantity}</span>
+          <a href="#" class="cartItem-quantity-plus material-icons-outlined" data-id="${cartItem.id}">
+            add_circle_outline
+          </a>
+        </div>
+      </td>
       <td>${formatCurrency(product.price * cartItem.quantity)}</td>
       <td class="discardBtn">
         <a href="#" class="material-icons" data-id="${cartItem.id}">
@@ -131,8 +141,29 @@ function initCartEventListeners() {
     }
   }
 
+  async function handleQuantityChange(e) {
+    const { target } = e;
+    const isMinus = target.classList.contains('cartItem-quantity-minus');
+    const isPlus = target.classList.contains('cartItem-quantity-plus');
+    if (!isMinus && !isPlus) return;
+    e.preventDefault();
+    const cartId = target.dataset.id;
+    const cartItem = cartData.carts.find(item => item.id === cartId);
+    try {
+      const newQuantity = isMinus ? cartItem.quantity - 1 : cartItem.quantity + 1;
+      if (newQuantity < 1) return;
+      const data = await addCartItem(cartItem.product.id, newQuantity);
+      updateCartState(data);
+      renderCartTable(data);
+    } catch (error) {
+      const message = error.response?.data?.message;
+      showErrorAlert("更新購物車失敗，請重新嘗試", message);
+    }
+  }
+
   cartTable.addEventListener('click', handleDeleteCartItem);
   cartTable.addEventListener('click', handleDeleteAllCartList);
+  cartTable.addEventListener('click', handleQuantityChange);
 }
 
 

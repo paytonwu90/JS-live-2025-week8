@@ -52,7 +52,7 @@ function renderOrderTable(data) {
         <td>${user.address}</td>
         <td>${user.email}</td>
         <td>
-          <p>${products.map(product => product.title).join('<br/>')}</p>
+          <p>${products.map(product => `${product.title} x ${product.quantity}`).join('<br/>')}</p>
         </td>
         <td>${formatDate(createdAt)}</td>
         <td class="orderStatus">
@@ -86,8 +86,8 @@ function renderChart(data) {
     const categoryRevenue = orders.reduce((acc, order) => {
       const { products } = order;
       products.forEach(product => {
-        const { category, price } = product;
-        acc[category] = (acc[category] || 0) + price;
+        const { category, price, quantity } = product;
+        acc[category] = (acc[category] || 0) + price * quantity;
       });
       return acc;
     }, {});
@@ -114,8 +114,8 @@ function renderChart(data) {
     const productRevenue = orders.reduce((acc, order) => {
       const { products } = order;
       products.forEach(product => {
-        const { title, price } = product;
-        acc[title] = (acc[title] || 0) + price;
+        const { title, price, quantity } = product;
+        acc[title] = (acc[title] || 0) + price * quantity;
       });
       return acc;
     }, {});
