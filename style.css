@@ -823,7 +823,6 @@ body {
   left: 0;
   display: block; */
   text-decoration: none;
-  color: #C44021;
 }
 
 /* .orderStatus-unDone {
@@ -842,12 +841,17 @@ body {
   background-color: #747474;
 } */
 
-.orderStatus-unDone:hover {
-  text-decoration: underline;
+.orderStatus-unDone {
+  color: #C44021;
 }
 
 .orderStatus-done {
   color: #21C44A;
+}
+
+.orderStatus-unDone:hover,
+.orderStatus-done:hover {
+  text-decoration: underline;
 }
 
 .orderTableWrap {

@@ -33,12 +33,12 @@ async function getOrderList() {
 }
 
 // 修改訂單狀態
-async function editOrderList(orderId) {
+async function editOrderList(orderId, paid) {
   try {
     const response = await axios.put(`${adminApiBaseUrl}/orders`, {
       data: {
         id: orderId,
-        paid: true
+        paid: paid
       }
     }, adminHeaders);
     return response.data;

@@ -56,7 +56,7 @@ function renderOrderTable(data) {
         </td>
         <td>${formatDate(createdAt)}</td>
         <td class="orderStatus">
-          ${paid ? '<span class="orderStatus-done">已處理</span>' : '<a href="#" class="orderStatus-unDone">未處理</a>'}
+          ${paid ? '<a href="#" class="orderStatus-done">已處理</a>' : '<a href="#" class="orderStatus-unDone">未處理</a>'}
         </td>
         <td>
           <input type="button" class="delSingleOrder-Btn" value="刪除">
@@ -165,12 +165,13 @@ function updateOrderState(data) {
 function initOrderAdminEventListeners() {
   async function handleOrderStatusChange(e) {
     const { target } = e;
-    if(!target.classList.contains('orderStatus-unDone')) return;
+    if(!target.classList.contains('orderStatus-unDone') && !target.classList.contains('orderStatus-done')) return;
     e.preventDefault();
 
     const orderId = target.closest('tr').querySelector('td:first-child').textContent;
+    const paid = target.classList.contains('orderStatus-done');
     try {
-      const data = await editOrderList(orderId);
+      const data = await editOrderList(orderId, !paid);
       updateOrderState(data);
       renderOrderTable(data);
     } catch (error) {
