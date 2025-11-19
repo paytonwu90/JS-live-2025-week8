@@ -86,7 +86,10 @@ function renderCartTable(data) {
 
 async function addCartItemAndRender(productId) {
   try {
-    const data = await addCartItem(productId);
+    // 先確定購物車內是否有同樣商品，有的話把數量加上去
+    const cartItem = cartData.carts.find(item => item.product.id === productId);
+    const quantity = cartItem ? cartItem.quantity + 1 : 1;
+    const data = await addCartItem(productId, quantity);
     updateCartState(data);
     renderCartTable(data);
     showSuccessAlert("已加入購物車");
