@@ -40,7 +40,9 @@ function renderOrderTable(data) {
     return;
   }
 
-  orderTableBody.innerHTML = orders.map(order => {
+  const sortedOrders = orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  orderTableBody.innerHTML = sortedOrders.map(order => {
     const { id, user, products, createdAt, paid } = order;
     return `
       <tr>

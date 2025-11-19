@@ -793,7 +793,7 @@ body {
           flex-direction: column;
 }
 
-.orderPage-list .discardAllBtn {
+.orderPage-operations {
   -ms-flex-item-align: end;
       align-self: flex-end;
   margin-bottom: 12px;
